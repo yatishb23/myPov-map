@@ -9,3 +9,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+.custom-label {
+  position: absolute;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 2px 5px;
+  border-radius: 3px;
+  pointer-events: none;
+}

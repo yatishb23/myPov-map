@@ -2,23 +2,52 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
-const location = require("./db.js");
+const db=require("mongoose")
 
-app.use(cors());
+db.connect("mongodb+srv://yatishbad232:Yatish123@cluster0.pelpggj.mongodb.net/")
 
-app.get("/locations", (req, res) => {
-  return res.send({
-    msg: "Hello",
-  });
+const locationSchema = new db.Schema({
+  lat: Number,
+  lng: Number,
+  name: String,
+  fontColor: String,
 });
 
-app.post("/locations", async (req, res) => {
-  const { name, coords } = req.body;
-  const newLocation = new Location({ name, coords });
-  await newLocation.save();
-  res.status(201).json(newLocation);
+const Location = db.model('Location', locationSchema);
+
+module.exports={
+  Location
+}
+app.use(cors());
+app.use(express.json());
+
+app.get('/getLocations', async (req, res) => {
+  try {
+    const locations = await Location.find();
+    res.status(200).json(locations);
+  } catch (error) {
+    res.status(500).send({ message: 'Error fetching locations!' });
+  }
+});
+
+app.post('/Location', async (req, res) => {
+  const payload =  req.body;
+
+  const location = new Location({
+    lat:payload.lat,
+    lng:payload.lng,
+    name:payload.name,
+    fontColor:payload.fontColor,
+  });
+
+  try {
+    await location.save();
+    res.status(200).send({ message: 'Location saved successfully!' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error saving location!' });
+  }
 });
 
 app.listen(4000, () => {
-  console.log("Server listening on port 3000");
+  console.log("Server listening on port 4000");
 });

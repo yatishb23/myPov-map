@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-import "leaflet-control-geocoder";
 import SearchBar from "./SearchBar";
 import ZoomControl from "./ZoomControl";
 import SearchFunctionality from "./SearchFunctionality";
-
 import { Box } from "@mui/material";
-
+import MapClickHandle from "./MapClickHandle";
 const PlainMap = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -40,7 +36,9 @@ const PlainMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <ZoomControl />
+      
         <SearchFunctionality query={searchQuery} />
+        <MapClickHandle/>
       </MapContainer>
     </Box>
   );
