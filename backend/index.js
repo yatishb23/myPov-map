@@ -2,16 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
-const db=require("mongoose")
+const db=require("mongoose");
 require('dotenv').config();
 
-db.connect(process.env.DB_URL)
+db.connect(`${process.env.DB_URL}`)
 
 const locationSchema = new db.Schema({
   lat: Number,
   lng: Number,
   name: String,
   fontColor: String,
+  font:String,
+  zoom:Number
 });
 
 const Location = db.model('Location', locationSchema);
@@ -38,7 +40,9 @@ app.post('/Location', async (req, res) => {
     lat:payload.lat,
     lng:payload.lng,
     name:payload.name,
-    fontColor:payload.fontColor,
+    fontColor:payload.color,
+    font:payload.font,
+    zoom:payload.zoom
   });
 
   try {

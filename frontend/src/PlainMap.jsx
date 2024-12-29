@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer} from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import SearchBar from "./SearchBar";
 import ZoomControl from "./ZoomControl";
 import SearchFunctionality from "./SearchFunctionality";
-import { Box } from "@mui/material";
+import RenderNames from "./RenderNam";
+import { Box, Button } from "@mui/material";
 import MapClickHandle from "./MapClickHandle";
+
 const PlainMap = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [locationData, setLocationData] = useState([]);
+  const [isVisible, setIsVisible] = useState(true); 
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/getLocations");
+        const data = await response.json();
+        setLocationData(data); 
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   return (
     <Box
@@ -32,13 +50,14 @@ const PlainMap = () => {
         zoomControl={false}
       >
         <TileLayer
-          url="https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <ZoomControl />
-      
         <SearchFunctionality query={searchQuery} />
         <MapClickHandle/>
+        <RenderNames locationData={locationData} isVisible={isVisible} />
       </MapContainer>
     </Box>
   );
