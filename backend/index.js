@@ -3,8 +3,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 const db=require("mongoose")
+require('dotenv').config();
 
-db.connect("mongodb+srv://yatishbad232:Yatish123@cluster0.pelpggj.mongodb.net/")
+db.connect(process.env.DB_URL)
 
 const locationSchema = new db.Schema({
   lat: Number,
